@@ -1,0 +1,132 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="w3-half w3-blue w3-container" style="height:700px">
+  <div id='app'></div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+var h = React.createElement;
+
+class SearchForm extends React.Component {
+  render() {
+    return (
+      h('form', {
+          className: "w3-container w3-card w3-padding-32 w3-white",
+          onSubmit: this.props.handleSubmit
+        },
+        h('div', {className: "w3-section"},
+          h('input', {className: "w3-input", autoFocus: "autoFocus",
+            id: "keyword",
+            placeholder:"Type a name or email address, then press Enter to search."},
+          )
+        )
+      )
+    );
+  }
+}
+
+class Description extends React.Component {
+  render() {
+    let description = "";
+    if(this.props.keyword) {
+      description = "Search Result: "+this.props.keyword;
+    }
+    else {
+      if(this.props.contacts) {
+        description = "Recently added contacts:";
+      }
+    }
+    return (
+      h('p', {className: 'w3-opacity'}, description)
+    );
+  }
+}
+
+class ResultList extends React.Component {
+  render() {
+    if(this.props.contacts && this.props.contacts.length > 0) {
+      var list = this.props.contacts.map((contact, i) => {
+        return (
+          h('tr', {key:i, className: "w3-white"},
+            h('td', null, contact.name),
+            h('td', null, contact.email)
+          )
+        );
+      });
+      return (
+        h('div', {className: "w3-container w3-responsive"},
+          h('table', {className: "w3-table"},
+            h('thead', null,
+              h('tr', null,
+                h('th', null, "Name"), h('th', null, "Email Address")
+              ),
+            ),
+            h('tbody', null,
+              list
+            )
+          )
+        )
+      );
+    }
+    else {
+      return (
+        h('p', {className: 'w3-opacity w3-center'}, "No Contacts Found!")
+      );
+    }
+  }
+}
+
+class Application extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { contacts: [], keyword: "" };
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    axios.get("{% url 'api_contacts' %}", {
+      params: { format: 'json', q: "" }
+    })
+    .then(response => {
+      this.setState({ contacts: response.data, keyword: "" });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    let keyword = document.getElementById('keyword').value;
+    axios.get("{% url 'api_contacts' %}", {
+      params: { format: 'json', q: keyword }
+    })
+    .then(response => {
+      this.setState({ contacts: response.data, keyword: keyword });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
+
+  render() {
+    return (
+      h('div', {className:"w3-padding-64"},
+        h('h2', null, 'Search (React)'),
+        h(SearchForm, {handleSubmit:this.handleSubmit}),
+        h(Description, {contacts:this.state.contacts, keyword:this.state.keyword}),
+        h(ResultList, {contacts:this.state.contacts, keyword:this.state.keyword})
+      )
+    )
+  }
+}
+
+ReactDOM.render(React.createElement(Application), document.getElementById('app'))
+</script>
+{% endblock %}

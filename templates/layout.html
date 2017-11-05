@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mini Address Book by H.Rayan</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<body class="w3-content" style="max-width:1300px">
+
+<div class="w3-row">
+  <div class="w3-half w3-black w3-container w3-center" style="height:700px">
+    <div class="w3-padding-64">
+      <h1>Mini Address Book</h1>
+    </div>
+    <div class="w3-padding-64">
+      <a href="{% url 'home' %}" class="w3-button w3-black w3-block w3-hover-teal w3-padding-16">Home (Django App)</a>
+      <a href="{% url 'new' %}" class="w3-button w3-black w3-block w3-hover-teal w3-padding-16">New Contact</a>
+      <a href="{% url 'react' %}" class="w3-button w3-black w3-block w3-hover-blue w3-padding-16">Search (React)</a>
+      <a href="{% url 'api_contacts' %}" class="w3-button w3-black w3-block w3-hover-dark-gray w3-padding-16" target="_blank">Search API</a>
+    </div>
+  </div>
+  {% block content %}{% endblock %}
+</div>
+
+<footer class="w3-container w3-light-grey w3-padding-16">
+  <p>H.Rayan</a></p>
+  <p>The HTML/CSS template is powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer>
+
+{% block javascript %}{% endblock %}
+
+</body>
+</html>

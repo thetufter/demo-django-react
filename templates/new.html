@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="w3-half w3-teal w3-container" style="height:700px">
+  <div class="w3-padding-64 w3-padding-large">
+    <h1>New Contact</h1>
+
+    <form class="w3-container w3-card w3-padding-32 w3-white" action="{% url 'new' %}" method="POST">
+      {% csrf_token %}
+
+      <div class="w3-section">
+        <label>Name</label>
+        {% for error in form.name.errors %}
+        <div class="w3-red"><strong>{{ error|escape }}</strong></div>
+        {% endfor %}
+        {% render_field form.name class="w3-input" autofocus="autofocus" %}
+      </div>
+
+      <div class="w3-section">
+        <label>Email Address</label>
+        {% for error in form.email.errors %}
+        <div class="w3-red"><strong>{{ error|escape }}</strong></div>
+        {% endfor %}
+        {{ form.email|add_class:"w3-input" }}
+      </div>
+
+      {% if form.non_field_errors %}
+      <div class="w3-section">
+        {% for error in form.non_field_errors %}
+        <div class="w3-red"><strong>{{ error|escape }}</strong></div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <button type="submit" class="w3-button w3-teal w3-right">Create</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

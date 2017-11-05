@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="w3-half w3-teal w3-container" style="height:700px">
+  <div class="w3-padding-64">
+    <h2>Home (Django App)</h2>
+    <form class="w3-container w3-card w3-padding-32 w3-white"
+      action="{% url 'home' %}" method="POST">
+      {% csrf_token %}
+      <div class="w3-section">
+        <input class="w3-input" style="width:100%;" type="text"
+          name="keyword" autofocus
+          placeholder="Search for name or email address..."
+          {% if keyword %}value="{{ keyword }}"{% endif %}>
+      </div>
+    </form>
+
+    {% if keyword %}
+    <p class="w3-opacity">Search Result: {{ keyword }}</p>
+    {% else %}
+
+    {% if contacts %}
+    <p class="w3-opacity">Recently added contacts:</p>
+    {% endif %}
+
+    {% endif %}
+
+    {% if contacts %}
+    <div class="w3-container w3-responsive">
+      <table class="w3-table">
+        <tr>
+          <th>Name</th>
+          <th>Email Address</th>
+        </tr>
+        {% for contact in contacts %}
+        <tr class="w3-white">
+          <td>{{ contact.name }}</td>
+          <td>{{ contact.email }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    {% else %}
+    <p class="w3-opacity w3-center">No Contacts Found!</p>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}
