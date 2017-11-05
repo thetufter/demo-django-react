@@ -53,11 +53,12 @@ class ContactList(generics.ListAPIView):
     serializer_class = ContactSerializer
 
     def get_queryset(self):
-        queryset = Person.objects.all()
         q = self.request.query_params.get('q', None)
-        if q is not None:
+        if q is None:
+            queryset = Person.objects.all().order_by('-id')
+        else:
             keyword = urllib.parse.unquote(q)
-            queryset = queryset.filter(
+            queryset = Person.objects.filter(
                 Q(name__icontains=keyword) | Q(email__icontains=keyword)
             )
         return queryset

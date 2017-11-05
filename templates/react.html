@@ -38,7 +38,7 @@ class Description extends React.Component {
       description = "Search Result: "+this.props.keyword;
     }
     else {
-      if(this.props.contacts) {
+      if(this.props.contacts && this.props.contacts.length > 0) {
         description = "Recently added contacts:";
       }
     }
@@ -51,7 +51,7 @@ class Description extends React.Component {
 class ResultList extends React.Component {
   render() {
     if(this.props.contacts && this.props.contacts.length > 0) {
-      var list = this.props.contacts.map((contact, i) => {
+      var list = this.props.contacts.reverse().map((contact, i) => {
         return (
           h('tr', {key:i, className: "w3-white"},
             h('td', null, contact.name),
